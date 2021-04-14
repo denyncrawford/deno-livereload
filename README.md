@@ -128,6 +128,8 @@ app.listen({ port });
 live.watch();
 ```
 
+> If you change the default port you must use it in the injected script too.
+
 ## Building the web client
 
 The client handles the incomming notifications from the server and you can bundle your own custon client:
