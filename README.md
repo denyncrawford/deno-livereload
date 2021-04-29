@@ -22,7 +22,7 @@ Deno LiveReload is a development tool for watching changes at your filesystem an
 ## Import
 
 ```typescript
-import LiveReload from 'https://deno.land/x/livereload@0.1.0/mod.ts'
+import LiveReload from 'https://deno.land/x/livereload@0.1.0/src/mod.ts'
 ```
 
 ## Usage
