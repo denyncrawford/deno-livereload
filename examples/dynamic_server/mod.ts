@@ -1,5 +1,5 @@
 import { opine } from "https://deno.land/x/opine@1.3.3/mod.ts";
-import LiveReload from '../../src/mod.ts'
+import LiveReload from '../../mod.ts'
 const live = new LiveReload(Deno.cwd());
 
 const app = opine();
