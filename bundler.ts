@@ -3,12 +3,10 @@ const decoder = new TextDecoder()
 const encoder = new TextEncoder();
 
 const options = {
-  input: "./src/client.ts",
-  output: {
-    file: "./dist/client.temp.ts",
-    format: "es" as const,
-    sourcemap: true,
-  },
+input: "./src/client.ts",
+output: {
+file: "./dist/client.temp.ts",
+format: "es" as const,
 };
 
 
@@ -17,21 +15,23 @@ const bundle = await rollup(options);
 await bundle.write(options.output);
 await bundle.close();
 
-let temp: Uint8Array | string = await Deno.readFile(options.output.file) 
+let temp: Uint8Array | string = await Deno.readFile(options.output.file)
 temp = decoder.decode(temp);
 
+
 const i1 = temp.indexOf('class PartialReadError')
-const i2 = i1 + 186;
+const i2Arr = temp.substring(i1).split('').map((c, i) => (c === '}') ? i : -1)
+.filter((c) => c !== -1);
 
-// temp = temp.split('').splice(i1, i2 - i1).join('')
+const i2 = i1 + i2Arr[1] + 1;
 
-temp = temp.replace(temp.substring(i1,i2), '')
+temp = temp.replace(temp.substring(i1,i2), '').replace('//# sourceMappingURL=client.temp.ts.map', '')
 
 const inject = `export default (protocol:string, port: number) => {
-  const decoder = new TextDecoder()
-  const module = new Uint8Array([${new TextEncoder().encode(temp)}]);
-  const result = decoder.decode(module);
-  return result.replace('$$PORT$$', port.toString()).replace('$$PROTOCOL$$', protocol)
+const decoder = new TextDecoder()
+const module = new Uint8Array([${new TextEncoder().encode(temp)}]);
+const result = decoder.decode(module);
+return result.replace('$$PORT$$', port.toString()).replace('$$PROTOCOL$$', protocol)
 }`
 
 await Deno.remove(options.output.file);

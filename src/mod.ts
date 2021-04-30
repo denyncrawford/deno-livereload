@@ -41,7 +41,7 @@ export default class Livereload {
         this.#file = client;
       } else client = this.#file;
       const headers = new Headers({'Content-Type':'application/javascript'})
-      req.respond({body: client, headers});
+      req.respond({body: client, headers, status: 200});
     }
     if (url === '/livereload') {
       this.#dropper.handle(req)
