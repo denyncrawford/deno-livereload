@@ -132,7 +132,9 @@ live.watch();
 
 ## Building the web client
 
-The client handles the incomming notifications from the server and you can bundle your own custon client:
+> The client is a ts file and you don't need to import it directly from the file system, instead livereload serves the constructed client as a js file. This is because it sets the port dynamically and builds the client in real-time every time a request is made.
+
+The client handles the inning notifications from the server and you can bundle your own custom client:
 
 1. Clone the repo
 2. Edit the src/client.ts

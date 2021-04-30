@@ -5,6 +5,7 @@ import { resolve, normalize } from 'https://deno.land/std@0.92.0/path/mod.ts'
 import globToRegexp from 'https://cdn.skypack.dev/glob-to-regexp'
 import { WatchOptions } from './types.ts'
 
+
 export default class Livereload {
   #options: WatchOptions = {
     port: 39430,
@@ -56,7 +57,7 @@ export default class Livereload {
 
   private async init () {
     if (this.#options.serve) this.serve();
-    this.#dropper.on('connection', (socket) => {
+    this.#dropper.on('connection', () => {
       return true;
     })
     const filePath = Array.isArray(this.#options.base) ? this.#options.base.map((e:string) => resolve(Deno.cwd(), e)) : resolve(Deno.cwd(), this.#options.base)
