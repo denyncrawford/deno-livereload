@@ -110,7 +110,7 @@ The constructed LiveReload class expose just two methods:
   **Handling request with opine example:**
 ```typescript
 import Livereload from '...'
-import { opine } from "https://deno.land/x/opine@1.3.2/mod.ts";
+import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
 
 const app = opine();
 const port = 3000;
