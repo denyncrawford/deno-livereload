@@ -48,12 +48,14 @@ live.watch()
 ```html
 <html>
   <head>
-    <!-- No served files -->
+    <!-- 1. No served files -->
     <script src="http://localhost:39430/livereload/client.js" defer></script>
-    <!-- Injecting for Served files -->
+    <!-- 2. Injecting for Served files -->
     <script defer>
       document.write(`<script src="http://'${(location.host || 'localhost').split(':')[0]}:39430/livereload/client.js></script>`)
     </script>
+    <!-- 3. Using the same dev server (with live.handle) -->
+    <script src="/livereload/client.js" defer></script>
   </head>
   <body>
     <h1>Hello world with Deno LiveReload</h1>
@@ -109,30 +111,44 @@ The constructed LiveReload class expose just two methods:
 
   **Handling request with opine example:**
 ```typescript
-import Livereload from '...'
-import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts";
-
+import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts"; // Note the version
+import LiveReload from '../../mod.ts'
+import { ServerRequest } from 'https://deno.land/std@0.83.0/http/server.ts';
 const app = opine();
 const port = 3000;
 
-const live = new Livereload({
+const live = new LiveReload({
   base: 'test',
   exclude: ['*.css'],
   serve: false,
   port
 });
 
-app.all("*", live.handle)
+app.get(['/livereload', '/livereload/client.js'],(req: ServerRequest) => {
+   live.handle(req)
+})
 
-app.listen({ port });
-live.watch();
+app.get("/", async (req: ServerRequest) => {
+  const name = new TextDecoder().decode(await Deno.readFile('name.txt'));
+  req.respond({status: 200,
+    headers: new Headers({
+      "content-type": "text/html",
+    }),
+    body:`<script src="http://localhost:${port}/livereload/client.js" defer></script>
+            <h1>My name is ${name}<h1>`
+    });
+});
+
+live.watch()
+
+app.listen(port);
 ```
 
-> If you change the default port you must use it in the injected script too.
+> NOTE: By now, this module is only compatible with the std@0.83.0 http ServerRequest interface, if you want to use a custom framework or dev server you must check first the http version of the module and match it with the compatible version.
 
 ## Building the web client
 
-> The client is a ts file and you don't need to import it directly from the file system, instead livereload serves the constructed client as a js file. This is because it sets the port dynamically and builds the client in real-time every time a request is made.
+> The client is a ts file and you don't need to import it directly from the file system, instead livereload serves the constructed client as a js file. This is because it sets the port dynamically and builds the client in real-time every time a request is made. For normal usage you won't need to build your own client.
 
 The client handles the inning notifications from the server and you can bundle your own custom client:
 
