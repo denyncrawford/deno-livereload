@@ -63,7 +63,7 @@ live.watch()
 </html>
 ```
 
-Livereload serves the backend instance and the client so it is stand alone by default, but if you have already a development server, you might want to disable the livereload server at the config object and use your own port and protocol, then you have to handle the incomming requests from the `/livereload` and `/livereload/client.js` endpoints with `LiveReload(options).handle(req)`. Please check [this example](/#handling-request-with-opine-example) to know how to use your own server.
+Livereload serves the backend instance and the client so it is stand alone by default, but if you have already a development server, you might want to disable the livereload server at the config object and use your own port and protocol, then you have to handle the incomming requests from the `/livereload` and `/livereload/client.js` endpoints with `LiveReload(options).handle(req)`. Please check [this example](#handling-request-with-opine-example) to know how to use your own server.
 
 ## Instantiating
 
