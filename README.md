@@ -27,7 +27,7 @@ import LiveReload from 'https://deno.land/x/livereload@0.1.0/src/mod.ts'
 
 ## Usage
 
-To use LiveReload you must create a server and then inject some code in your html.
+To use LiveReload you must create a WATCHER and then inject some code in your html.
 
 1. Create a server or handler:
   
@@ -62,6 +62,8 @@ live.watch()
   </body>
 </html>
 ```
+
+Livereload serves the backend instance and the client so it is stand alone by default, but if you have already a development server, you might want to disable the livereload server at the config object and use your own port and protocol, then you have to handle the incomming requests from the `/livereload` and `/livereload/client.js` endpoints with `LiveReload(options).handle(req)`. Please check [this example](/#handling-request-with-opine-example) to know how to use your own server.
 
 ## Instantiating
 
@@ -109,7 +111,7 @@ The constructed LiveReload class expose just two methods:
   - If the serve option is false you can use this method to handle each request of your own http server or http framework.
   - *required*: `flase`
 
-  **Handling request with opine example:**
+ ## Handling request with opine example:
 ```typescript
 import { opine } from "https://deno.land/x/opine@1.0.2/mod.ts"; // Note the version
 import LiveReload from '../../mod.ts'
